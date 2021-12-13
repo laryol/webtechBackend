@@ -1,7 +1,11 @@
 import { Knex } from "knex"
 const config: Knex.Config = {
     client: "postgresql",
-    connection: "postgresql://knut@localhost:5432/expenses",
+    connection: {
+        host : 'redis-15713.c135.eu-central-1-1.ec2.cloud.redislabs.com',
+        port: 15713
+    },
+
     pool: {
         min: 2,
         max: 10
