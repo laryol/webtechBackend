@@ -1,4 +1,4 @@
-// seeds/initial_seed.ts
+// seeds/initial_table_seed.ts
 import { Knex } from "knex";
 
 export async function seed(knex: Knex): Promise<void> {
@@ -21,11 +21,6 @@ export async function seed(knex: Knex): Promise<void> {
         },
     ]);
 }
-
-
-
-
-
 /*
 import { Knex } from "knex";
 

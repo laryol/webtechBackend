@@ -1,5 +1,7 @@
 import { Knex } from "knex";
 
+// hier REISE TABELLE
+
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema

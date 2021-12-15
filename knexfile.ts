@@ -1,4 +1,4 @@
-/*import { Knex } from "knex";
+import { Knex } from "knex";
 
 const config: Knex.Config = {
     client: "pg",
@@ -19,9 +19,8 @@ const config: Knex.Config = {
 };
 
 export default config;
-*/
 
-
+/*
 import { Knex } from "knex"
 const config: Knex.Config = {
     client: "postgresql",
@@ -39,3 +38,4 @@ const config: Knex.Config = {
     }
 };
 export default config;
+*/
