@@ -10,7 +10,7 @@ const loginError = document.querySelector('.error')
 const BASE_URL = "https://webtechbackend.herokuapp.com/"
 
 const login = async (email, password) => {
-    const loginUrl = `${BASE_URL}/login`
+    const loginUrl = `${BASE_URL}`
 // if email==huehne return true
     const result = await fetch(loginUrl, {
         method: 'Post',
