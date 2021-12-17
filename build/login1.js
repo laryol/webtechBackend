@@ -1,8 +1,12 @@
-/* fetch('GET http://localhost/')
+"use strict";
+/*
+fetch('GET http://localhost/')
+
+const BASE_URL = "https://webtechbackend.herokuapp.com/"
 
 const form = document.querySelector('form')
 
-const login = async(email,password) => {
+const login = async(email: String, password: String) => {
     const loginUrl = `${BASE_URL}/login`
 
     const result = await fetch(loginUrl, {
@@ -11,6 +15,7 @@ const login = async(email,password) => {
         body: JSON.stringify({email,password})
         })
 }
+
 form.addEventListener('submit', (event)=> {
     event.preventDefault();
 
@@ -20,6 +25,4 @@ form.addEventListener('submit', (event)=> {
                 console.log('it worked');
             }
         })
-})
-
-*/
+})*/

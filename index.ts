@@ -1,33 +1,6 @@
-import express from 'express';
-import axios from "axios";
-const app = express()
-const cors = require('cors')
-const port = process.env.PORT || 3000
-app.use(cors())
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", '*');
-    res.header("Access-Control-Allow-Credentials", 'true');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-    next();
-});
-
-
-app.get('/api', (req, res) => {
-    res.status(200).json({api: 'version 1'})
-})
-axios.get(`'https://webtechbackend.herokuapp.com/api'`,{headers: {'Access-Control-Allow-Origin': '*'}})
-    .then(response => console.log(response.data))
-
-app.use((req, res) => res.status(404).send({code: '404', message: 'no found'}))
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:`, port)
-})
-
-
-/* import express from 'express';
+import express, { Request } from "express";
 import cors from "cors";
+import AuthService from "./services/AuthService";
 
 
 //const cors = require('cors')
@@ -35,7 +8,29 @@ import cors from "cors";
 
 const port = process.env.PORT || 3000
 const app = express()
-const port1 = 3000
+const authService = new AuthService();
+//initialisieren AuthService
+
+//grau heißt wird nicht benutzt
+const checkLogin = async (
+    req: Request,
+    res: express.Response,
+    next: express.NextFunction
+) => {
+    const session = req.cookies.session;
+    if (!session) {
+        res.status(401);
+        return res.json({ message: "You need to be logged in to see this page." });
+    }
+    const email = await authService.getUserEmailForSession(session);
+    if (!email) {
+        res.status(401);
+        return res.json({ message: "You need to be logged in to see this page." });
+    }
+    req.userEmail = email;
+
+    next();
+};
 
 app.use(cors({
     origin: true,
@@ -45,9 +40,24 @@ app.use(cors({
 app.get('/', (req, res) => {
     res.send({headers: req.headers})
 })
+
+//aus Herrn Hühnes Server Beispiel
+app.post("/login", async (req, res) => { //request kommt an
+    const payload = req.body; //lesen der Daten des Requests
+    const sessionId = await authService.login(payload.email, payload.password); //bekommen sessionId mit den Daten
+    if (!sessionId) {
+        res.status(401);
+        return res.json({ message: "Bad email or password" });
+    }
+    res.cookie("session", sessionId, {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+        sameSite: "none",
+        secure: process.env.NODE_ENV === "production",
+    });
+    res.json({ status: "ok" });
+});
+
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
-
-
- */
