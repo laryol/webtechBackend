@@ -1,4 +1,4 @@
-fetch('GET http://localhost/')
+/* fetch('GET http://localhost/')
 
 const form = document.querySelector('form')
 
@@ -21,3 +21,5 @@ form.addEventListener('submit', (event)=> {
             }
         })
 })
+
+*/

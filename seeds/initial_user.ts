@@ -1,4 +1,6 @@
 import { Knex } from "knex";
+//header("Access-Control-Allow-Origin: *");
+
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
