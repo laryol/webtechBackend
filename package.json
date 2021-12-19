@@ -30,7 +30,8 @@
     "express": "^4.17.1",
     "knex": "^0.95.14",
     "pg": "^8.7.1",
-    "prompt": "^1.2.0"
+    "prompt": "^1.2.0",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
