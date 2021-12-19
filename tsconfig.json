@@ -4,20 +4,7 @@
     "files": true
   },
   "compilerOptions": {
-    "esModuleInterop": true,
     "strict": true,
     "outDir": "./build",
-    "lib": ["es5", "es6", "dom"]
   }
 }
-
-
-/*
-
-{
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "strict": true
-  }
-}
-*/

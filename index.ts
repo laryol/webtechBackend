@@ -1,19 +1,36 @@
 import express from "express";
-
-import AuthService from "./services/AuthService";
 import cookieParser from "cookie-parser";
-
+import { HttpError } from "express-openapi-validator/dist/framework/types";
+import AuthService from "./services/AuthService";
+import {knex as knexDriver} from "knex";
 import cors from "cors";
-
+import config from "./knexfile";
 
 const app = express()
 const port = process.env.PORT || 3000
 
+const knex = knexDriver(config);
 const authService = new AuthService();
 
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+    (
+        err: HttpError,
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+    ) => {
+        // format error
+        res.status(err.status || 500).json({
+            message: err.message,
+            errors: err.errors,
+        });
+    }
+);
+
 
 
 app.get('/', (req, res) => {
