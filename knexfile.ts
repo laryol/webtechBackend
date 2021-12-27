@@ -1,4 +1,5 @@
 import {Knex} from "knex";
+require('dotenv').config()
 
 const config: Knex.Config = {
     client: "pg",
