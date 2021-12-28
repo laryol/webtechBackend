@@ -1,4 +1,4 @@
-import express from "express";
+import express, {Request} from "express";
 import cookieParser from "cookie-parser";
 import {HttpError} from "express-openapi-validator/dist/framework/types";
 import AuthService from "./services/AuthService";
@@ -41,33 +41,55 @@ app.use((err: HttpError,
     }
 );
 
-// const checkLogin = async (
-//     req: Request,
-//     res: express.Response,
-//     next: express.NextFunction
-// ) => {
-//     const session = req.cookies.session;
-//     if (!session) {
-//         res.status(401);
-//         return res.json({message: "You need to be logged in to see this page."});
-//     }
-//     const email = await authService.getUserEmailForSession(session);
-//     if (!email) {
-//         res.status(401);
-//         return res.json({message: "You need to be logged in to see this page."});
-//     }
-//     req.userEmail = email;
-//
-//     next();
-// };
+const checkLogin = async (
+    req: Request,
+    res: express.Response,
+    next: express.NextFunction
+) => {
+    const session = req.cookies.session;
+    console.log(session)
+    if (!session) {
+        res.status(401);
+        return res.json({message: "You need to be logged in to see this page."});
+    }
+    const email = await authService.getUserEmailForSession(session);
+    if (!email) {
+        res.status(401);
+        return res.json({message: "You need to be logged in to see this page."});
+    }
+    req.userEmail = email;
+
+    next();
+};
 
 
 app.get('/', (req, res) => {
     res.send({headers: req.headers})
 })
 
-app.get('/vacations', (req, res) => {
+app.get('/vacations', checkLogin, async (req, res) => {
+    await vacationService.getAll(req.userEmail!)
+        .then((vacation_list) => res.send(vacation_list))
+})
 
+app.post("/vacations", checkLogin, (req, res) => {
+    const payload = req.body;
+    vacationService.add(payload).then((newEntry) => res.send(newEntry));
+});
+
+app.get("/vacations/:vacationId", checkLogin, (req, res) => {
+    const id = req.params.vacationId;
+    vacationService.getVacation(id).then((vacation) => {
+        res.send(vacation)
+    })
+})
+
+app.delete("/vacations/:vacationId", checkLogin, (req, res) => {
+    const id = req.params.vacationId;
+    vacationService.delete(id).then(() => {
+        res.status(204)
+        res.send()
+    })
 })
 
 app.post("/login", async (req, res) => {

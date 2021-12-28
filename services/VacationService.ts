@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { Knex } from "knex";
+import {Knex} from "knex";
 
 type Vacation = {
     id: string;
@@ -22,8 +22,9 @@ class VacationService {
         this.knex = knex;
     }
 
-    async getVacation(uuid: string): Promise<void>{
-        await this.knex("vacation").where({id: uuid})
+
+    async getVacation(uuid: string): Promise<Vacation>{
+        return this.knex("vacation").where({id: uuid}).first();
     }
 
     async add(vacation: Vacation): Promise<SavedVacation> {
@@ -39,8 +40,11 @@ class VacationService {
         await this.knex("vacation").where({ id: uuid }).delete();
     }
 
-    async getAll(): Promise<Vacation[]> {
-        return this.knex("vacation");
+    async getAll(email: string): Promise<Vacation[]>{
+        return this.knex("vacation_list")
+            .select("vacation.id","vacation_list_id","vacation_name", "country_name", "start_date", "end_date")
+            .innerJoin("vacation","vacation_list.id","vacation.vacation_list_id")
+            .where({user_email: email})
     }
 
 }
