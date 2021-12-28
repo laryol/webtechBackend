@@ -5,14 +5,24 @@ import AuthService from "./services/AuthService";
 import {knex as knexDriver} from "knex";
 import cors from "cors";
 import config from "./knexfile";
+import VacationService from "./services/VacationService";
 
 const app = express()
 const port = process.env.PORT || 3000
 
 const knex = knexDriver(config);
 const authService = new AuthService();
+const vacationService = new VacationService(knex);
 
-app.use(cors());
+app.use(
+    cors({
+            origin: (process.env.NODE_ENV === "production"
+                ? "https://practical-ritchie-5eb3ae.netlify.app"
+                : "http://localhost:300"),
+            credentials: true,
+        }
+    )
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -30,9 +40,33 @@ app.use((err: HttpError,
     }
 );
 
+// const checkLogin = async (
+//     req: Request,
+//     res: express.Response,
+//     next: express.NextFunction
+// ) => {
+//     const session = req.cookies.session;
+//     if (!session) {
+//         res.status(401);
+//         return res.json({message: "You need to be logged in to see this page."});
+//     }
+//     const email = await authService.getUserEmailForSession(session);
+//     if (!email) {
+//         res.status(401);
+//         return res.json({message: "You need to be logged in to see this page."});
+//     }
+//     req.userEmail = email;
+//
+//     next();
+// };
+
 
 app.get('/', (req, res) => {
     res.send({headers: req.headers})
+})
+
+app.get('/vacations', (req, res) => {
+
 })
 
 app.post("/login", async (req, res) => {
