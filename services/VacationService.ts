@@ -23,8 +23,12 @@ class VacationService {
     }
 
 
-    async getVacation(uuid: string): Promise<Vacation>{
-        return this.knex("vacation").where({id: uuid}).first();
+    async getVacation(uuid: string, email: string): Promise<Vacation>{
+        return this.knex("vacation as v")
+            .select("v.id","vacation_list_id","vacation_name", "country_name", "start_date", "end_date")
+            .innerJoin("vacation_list as vl", "v.vacation_list_id", "vl.id")
+            .where({user_email: email}).andWhere({'v.id': uuid})
+            .first();
     }
 
     async add(vacation: Vacation): Promise<SavedVacation> {

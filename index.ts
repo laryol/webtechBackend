@@ -78,7 +78,7 @@ app.post("/vacations", checkLogin, (req, res) => {
 
 app.get("/vacations/:vacationId", checkLogin, (req, res) => {
     const id = req.params.vacationId;
-    vacationService.getVacation(id).then((vacation) => {
+    vacationService.getVacation(id, req.userEmail!).then((vacation) => {
         res.send(vacation)
     })
 })
