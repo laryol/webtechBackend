@@ -8,17 +8,19 @@ axios.get(`'https://webtechbackend.herokuapp.com/api'`,{headers: {'Access-Contro
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
-    await knex("expenses").del();
+    await knex("vacation").del();
+    await knex("vacation_list").del();
+    await knex("users").del();
 
     // Inserts seed entries
-    await knex("expenses").insert([
+    await knex("users").insert([
         {
-            email: "111@test.de",
-            password: "pw1"
+            email: "max.mustermann@gmail.com",
+            password: "1234"
         },
         {
-            email: "222@test.de",
-            password: "pw2"
+            email: "huehne@htw-berlin.de",
+            password: "hunter2"
         },
     ]);
 }

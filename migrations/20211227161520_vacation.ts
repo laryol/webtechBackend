@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     return knex.schema
         .createTable('vacation', function (table) {
             table.uuid('id').primary();
-            table.uuid('vacation_list_id').references('id').inTable('vacation_list')
+            table.uuid('vacation_list_id').references('id').inTable('vacation_list').onDelete('CASCADE')
             table.string('vacation_name')
             table.string('country_name')
             table.date('start_date').notNullable();
