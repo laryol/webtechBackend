@@ -14,11 +14,12 @@ const knex = knexDriver(config);
 const authService = new AuthService();
 const vacationService = new VacationService(knex);
 
+
 app.use(
     cors({
             origin: (process.env.NODE_ENV === "production"
                 ? "https://practical-ritchie-5eb3ae.netlify.app"
-                : "http://localhost:300"),
+                : "http://localhost:3001"),
             credentials: true,
         }
     )

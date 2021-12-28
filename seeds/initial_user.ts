@@ -16,11 +16,11 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("users").insert([
         {
             email: "max.mustermann@gmail.com",
-            password: "1234"
+            password: "$2b$10$rzADt0dKQBISiTpVkE.3o.9dQNfSFcMCCI5bT2FiBWhiNzmgYDh8."
         },
         {
             email: "huehne@htw-berlin.de",
-            password: "hunter2"
+            password: "$2b$10$dEe.OjAOd5rc9tvfoYOGIOxTeO7ATWgmOEL9h/FbGAw/1T4MC3lPa"
         },
     ]);
 }
