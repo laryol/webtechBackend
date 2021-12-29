@@ -23,9 +23,9 @@ class VacationService {
     }
 
 
-    async getVacation(uuid: string, email: string): Promise<Vacation>{
+    async getVacation(uuid: string, email: string): Promise<Vacation> {
         return this.knex("vacation as v")
-            .select("v.id","vacation_list_id","vacation_name", "country_name", "start_date", "end_date")
+            .select("v.id", "vacation_list_id", "vacation_name", "country_name", "start_date", "end_date")
             .innerJoin("vacation_list as vl", "v.vacation_list_id", "vl.id")
             .where({user_email: email}).andWhere({'v.id': uuid})
             .first();
@@ -40,14 +40,24 @@ class VacationService {
         return newVacation;
     }
 
-    async delete(uuid: string): Promise<void> {
-        await this.knex("vacation").where({ id: uuid }).delete();
+    async update(vacation: Vacation, vacationId: string): Promise<Number> {
+        const newVacation = {
+            ...vacation,
+            id: vacationId,
+        };
+        return this.knex("vacation")
+            .where({id: vacationId})
+            .update(newVacation)
     }
 
-    async getAll(email: string): Promise<Vacation[]>{
+    async delete(uuid: string): Promise<void> {
+        await this.knex("vacation").where({id: uuid}).delete();
+    }
+
+    async getAll(email: string): Promise<Vacation[]> {
         return this.knex("vacation_list")
-            .select("vacation.id","vacation_list_id","vacation_name", "country_name", "start_date", "end_date")
-            .innerJoin("vacation","vacation_list.id","vacation.vacation_list_id")
+            .select("vacation.id", "vacation_list_id", "vacation_name", "country_name", "start_date", "end_date")
+            .innerJoin("vacation", "vacation_list.id", "vacation.vacation_list_id")
             .where({user_email: email})
     }
 

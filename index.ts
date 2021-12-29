@@ -71,6 +71,25 @@ app.get('/vacations', checkLogin, async (req, res) => {
         .then((vacation_list) => res.send(vacation_list))
 })
 
+app.put('/vacations/:vacationId', checkLogin, (req, res) => {
+    const id = req.params.vacationId;
+    const payload = req.body;
+
+    vacationService
+        .update(payload, id)
+        .then((count) => {
+            if (count) {
+                res.status(200).json({updated: count})
+            } else {
+                res.status(404).json({message: "Record not found"})
+            }
+        })
+        .catch((err) => {
+            console.log("Hey I found the error!")
+            res.status(500).json({message: "Error updating new post", error: err})
+        });
+})
+
 app.post("/vacations", checkLogin, (req, res) => {
     const payload = req.body;
     vacationService.add(payload).then((newEntry) => res.send(newEntry));
