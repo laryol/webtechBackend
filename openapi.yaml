@@ -1,0 +1,128 @@
+openapi: 3.0.1
+info:
+  title: Vacation Planner
+  description: This is the Vacation Planner API
+  version: 1.0.0
+externalDocs:
+  description: Github
+  url: http://github.com/example
+servers:
+  - url: https://webtechbackend2.herokuapp.com/
+tags:
+  - name: vacation
+    description: Everything about your vacations
+
+paths:
+  /:
+    get:
+      tags:
+        - root
+      summary: Root route to check if server is online
+      responses:
+        "200":
+          description: Server could return a message
+          content:
+            application/json:
+              schema:
+                type: array
+
+  /vacations:
+    get:
+      tags:
+        - vacations
+      summary: Get all vacation
+      responses:
+        "200":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SavedVacation'
+    post:
+      tags:
+        - vacation
+      summary: Add a new vacation
+      requestBody:
+        description: vacation object that needs to be added to the db
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vacation'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedVacation'
+
+  /vacations/{uuid}:
+    delete:
+      tags:
+        - vacation
+      summary: Deletes an vacation by uuid
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: uuid of the entry to delete
+      responses:
+        "204":
+          description: successful operation
+
+  /login:
+    post:
+      tags:
+        - login
+      summary: Log in and get cookie for authentication
+      responses:
+        "200":
+          description: Successfull request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+
+components:
+  schemas:
+    Vacation:
+      type: object
+      properties:
+        name:
+          type: string
+        date:
+          type: string
+          format: date-time
+        value:
+          type: integer
+          format: int32
+    SavedVacation:
+      allOf:
+        - $ref: '#/components/schemas/Vacation'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+    Summary:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
