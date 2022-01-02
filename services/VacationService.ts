@@ -54,6 +54,12 @@ class VacationService {
         await this.knex("vacation").where({id: uuid}).delete();
     }
 
+    async getVacationList(email: string): Promise<void> {
+        await this.knex("vacation_list")
+            .select("id")
+            .where({user_email: email})
+    }
+
     async getAll(email: string): Promise<Vacation[]> {
         return this.knex("vacation_list")
             .select("vacation.id", "vacation_list_id", "vacation_name", "country_name", "start_date", "end_date")

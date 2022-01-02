@@ -139,8 +139,8 @@ app.post("/login", async (req, res) => {
     res.cookie("session", sessionId, {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "none",
-        secure: true,
+        sameSite: "lax",
+        secure: false,
     });
     res.json({status: "ok"});
 });
@@ -159,6 +159,10 @@ app.post("/login", async (req, res) => {
 app.get('/vacations', checkLogin, async (req, res) => {
     await vacationService.getAll(req.userEmail!)
         .then((vacation_list) => res.send(vacation_list))
+        .catch((err) => {
+            console.log("Hey I found the error!")
+            res.status(500).json({message: "Error updating new post", error: err})
+        });
 })
 
 /**
@@ -235,7 +239,10 @@ app.get("/vacations/:vacationId", checkLogin, (req, res) => {
      */
     vacationService.getVacation(id, req.userEmail!).then((vacation) => {
         res.send(vacation)
-    })
+    }).catch((err) => {
+        console.log("Hey I found the error!")
+        res.status(500).json({message: "Error updating new post", error: err})
+    });
 })
 
 /**
@@ -256,9 +263,31 @@ app.delete("/vacations/:vacationId", checkLogin, (req, res) => {
     vacationService.delete(id).then(() => {
         res.status(204)
         res.send()
-    })
+    }).catch((err) => {
+        console.log("Hey I found the error!")
+        res.status(500).json({message: "Error updating new post", error: err})
+    });
 })
 
+/**
+ * @openapi
+ * /vacationListId:
+ *   get:
+ *     description: returns vacationlistId
+ *     responses:
+ *       204:
+ *         description: Success
+ *       401:
+ *         description: Unauthorized
+ */
+app.get("/vacationListId", checkLogin, (req, res) => {
+    vacationService.getVacationList(req.userEmail!)
+        .then((id) => res.send(id))
+        .catch((err) => {
+            console.log("Hey I found the error!")
+            res.status(500).json({message: "Error updating new post", error: err})
+        });
+})
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
