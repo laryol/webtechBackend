@@ -176,7 +176,12 @@ app.get('/vacations', checkLogin, async (req, res) => {
  */
 app.post("/vacations", checkLogin, (req, res) => {
     const payload = req.body;
-    vacationService.add(payload).then((newEntry) => res.send(newEntry));
+    vacationService.add(payload)
+        .then((newEntry) => res.send(newEntry))
+        .catch((err) => {
+            console.log("Hey I found the error!")
+            res.status(500).json({message: "Error updating new post", error: err})
+        });
 });
 
 /**
