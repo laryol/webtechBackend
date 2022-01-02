@@ -139,8 +139,8 @@ app.post("/login", async (req, res) => {
     res.cookie("session", sessionId, {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
+        sameSite: "none",
+        secure: true,
     });
     res.json({status: "ok"});
 });
